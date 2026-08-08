@@ -1,0 +1,29 @@
+{
+  "name": "fraud_streaming_pipeline",
+  "tasks": [
+    {
+      "task_key": "bronze_stream",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/04_bronze_stream"
+      }
+    },
+    {
+      "task_key": "silver_stream",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/05_silver_stream"
+      },
+      "depends_on": [
+        { "task_key": "bronze_stream" }
+      ]
+    },
+    {
+      "task_key": "gold_stream",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/06_gold_stream"
+      },
+      "depends_on": [
+        { "task_key": "silver_stream" }
+      ]
+    }
+  ]
+}

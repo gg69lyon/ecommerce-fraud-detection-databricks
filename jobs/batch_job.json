@@ -1,0 +1,29 @@
+{
+  "name": "fraud_batch_pipeline",
+  "tasks": [
+    {
+      "task_key": "bronze_batch",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/01_bronze_batch"
+      }
+    },
+    {
+      "task_key": "silver_batch",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/02_silver_batch"
+      },
+      "depends_on": [
+        { "task_key": "bronze_batch" }
+      ]
+    },
+    {
+      "task_key": "gold_batch",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/03_gold_batch"
+      },
+      "depends_on": [
+        { "task_key": "silver_batch" }
+      ]
+    }
+  ]
+}

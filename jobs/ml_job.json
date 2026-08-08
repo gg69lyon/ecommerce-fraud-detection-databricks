@@ -1,0 +1,32 @@
+{
+  "name": "fraud_ml_pipeline",
+  "tasks": [
+    {
+      "task_key": "ml_batch",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/07_ml_training_batch"
+      },
+      "depends_on": [
+        { "task_key": "silver_batch" }
+      ]
+    },
+    {
+      "task_key": "ml_inference",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/08_ml_inference_streaming"
+      },
+      "depends_on": [
+        { "task_key": "silver_stream" }
+      ]
+    },
+    {
+      "task_key": "ml_monitoring",
+      "notebook_task": {
+        "notebook_path": "/Repos/phamgerard69@gmail.com/ecommerce-fraud-detection-databricks/notebooks/09_ml_monitoring"
+      },
+      "depends_on": [
+        { "task_key": "gold_stream" }
+      ]
+    }
+  ]
+}
