@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Databricks CLI v2
-        run: pip install databricks-cli==0.205.0
+        run: pip install databricks-cli==0.18.0
 
       - name: Configure Databricks CLI
         run: |
