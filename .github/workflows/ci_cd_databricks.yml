@@ -13,21 +13,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Databricks CLI v2
-        run: pip install databricks
-
-      - name: Configure Databricks CLI
+      # Mettre à jour le repo Databricks via API REST
+      - name: Update Databricks Repo
         run: |
-          export DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST }}
-          export DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
+          curl -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.DATABRICKS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"branch\": \"main\"}" \
+            "${{ secrets.DATABRICKS_HOST }}/api/2.0/repos/${{ secrets.DATABRICKS_REPO_ID }}"
 
-      - name: Sync Repo to Databricks
-        run: |
-          databricks repos update \
-            --path "${{ secrets.DATABRICKS_REPO_PATH }}" \
-            --branch main
-
+      # Déclencher le job Batch
       - name: Trigger Batch Job
         run: |
-          databricks jobs run-now --job-id ${{ secrets.DATABRICKS_BATCH_JOB_ID }}
-
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.DATABRICKS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{}" \
+            "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_BATCH_JOB_ID }}"
