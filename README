@@ -206,7 +206,6 @@ Workflow GitHub Actions
 .github/workflows/ci_cd_databricks.yml
 ```
 Déclenche :
-
 * synchronisation GitHub → Databricks Repos
 * exécution des jobs Databricks :
   * Batch pipeline
