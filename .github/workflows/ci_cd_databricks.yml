@@ -1,4 +1,4 @@
-name: CI-CD Databricks
+name: CI-CD Fraud Pipeline
 
 on:
   push:
@@ -6,34 +6,25 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 1. Encode Databricks Token for Basic Auth
-      - name: Encode Databricks Token
-        id: encode
-        run: |
-          echo "token=$(echo -n '${{ secrets.DATABRICKS_TOKEN }}:' | base64)" >> $GITHUB_OUTPUT
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-      # 2. Trigger Batch Job
-      - name: Trigger Batch Job
+      - name: Install dependencies
         run: |
-          curl -X POST \
-            -H "Authorization: Basic ${{ steps.encode.outputs.token }}" \
-            -H "Content-Type: application/json" \
-            -d "{}" \
-            "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_BATCH_JOB_ID }}"
+          pip install --upgrade pip
+          pip install pyspark
+          pip install pytest
+          pip install nbformat nbconvert      
 
-      # 3. Trigger Streaming Job
-      - name: Trigger Streaming Job
-        run: |
-          curl -X POST \
-            -H "Authorization: Basic ${{ steps.encode.outputs.token }}" \
-            -H "Content-Type: application/json" \
-            -d "{}" \
-            "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_STREAM_JOB_ID }}"
+      - name: Run PySpark tests
+        run: pytest tests/
 
