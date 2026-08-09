@@ -4,40 +4,30 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  deploy-to-databricks:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Databricks CLI
-        run: pip install databricks-cli
+      - name: Install Databricks CLI v2
+        run: pip install databricks-cli==0.205.0
 
       - name: Configure Databricks CLI
         run: |
-          databricks configure --token <<EOF
-          ${{ secrets.DATABRICKS_HOST }}
-          ${{ secrets.DATABRICKS_TOKEN }}
-          EOF
+          export DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST }}
+          export DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
 
-      - name: Sync GitHub → Databricks Repos
+      - name: Sync Repo to Databricks
         run: |
           databricks repos update \
             --path "${{ secrets.DATABRICKS_REPO_PATH }}" \
             --branch main
 
-      - name: Trigger Batch Pipeline
+      - name: Trigger Batch Job
         run: |
-          databricks jobs run-now --job-id 12345
+          databricks jobs run-now --job-id ${{ secrets.DATABRICKS_BATCH_JOB_ID }}
 
-      - name: Trigger Streaming Pipeline
-        run: |
-          databricks jobs run-now --job-id 67890
-
-      - name: Trigger ML Pipeline
-        run: |
-          databricks jobs run-now --job-id 54321
