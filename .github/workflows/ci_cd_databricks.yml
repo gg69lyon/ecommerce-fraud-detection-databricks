@@ -13,22 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Encoder ton token Databricks en Base64
+      # 1. Encode Databricks Token for Basic Auth
       - name: Encode Databricks Token
         id: encode
         run: |
           echo "token=$(echo -n '${{ secrets.DATABRICKS_TOKEN }}:' | base64)" >> $GITHUB_OUTPUT
 
-      # Mettre à jour le repo Databricks via API REST
-      - name: Update Databricks Repo
-        run: |
-          curl -X PATCH \
-            -H "Authorization: Bearer ${{ steps.encode.outputs.token }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"branch\": \"main\"}" \
-            "${{ secrets.DATABRICKS_HOST }}/api/2.0/repos/${{ secrets.DATABRICKS_REPO_ID }}"
-
-      # Déclencher le job Batch
+      # 2. Trigger Batch Job
       - name: Trigger Batch Job
         run: |
           curl -X POST \
@@ -37,7 +28,7 @@ jobs:
             -d "{}" \
             "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_BATCH_JOB_ID }}"
 
-      # Déclencher le job Streaming
+      # 3. Trigger Streaming Job
       - name: Trigger Streaming Job
         run: |
           curl -X POST \
@@ -45,3 +36,4 @@ jobs:
             -H "Content-Type: application/json" \
             -d "{}" \
             "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_STREAM_JOB_ID }}"
+
