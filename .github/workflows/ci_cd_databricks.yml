@@ -30,3 +30,12 @@ jobs:
             -H "Content-Type: application/json" \
             -d "{}" \
             "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_BATCH_JOB_ID }}"
+
+      # Déclencher le job Streaming
+      - name: Trigger Streaming Job
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.DATABRICKS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{}" \
+            "${{ secrets.DATABRICKS_HOST }}/api/2.1/jobs/run-now?job_id=${{ secrets.DATABRICKS_STREAM_JOB_ID }}"
