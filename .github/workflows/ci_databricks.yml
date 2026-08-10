@@ -29,8 +29,10 @@ jobs:
       
       - name: Lint notebooks with nbQA
         run: |
+          pip install nbqa flake8
           nbqa flake8 notebooks/
           nbqa black --check notebooks/
+          python -m nbqa flake8 notebooks/
       
       - name: Run PySpark tests
         run: pytest tests/
