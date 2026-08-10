@@ -1,0 +1,19 @@
+[flake8]
+# Déclare spark et dbutils comme variables globales Databricks
+builtins = spark, dbutils
+# Ignorer certaines règles spécifiques dans TOUT le projet
+ignore = 
+    E501,  # Line too long
+    F821,  # Undefined name (ex: spark, dbutils)
+    E225   # Missing whitespace around operator
+
+# Ou étendre la limite de longueur de ligne au lieu de l'ignorer
+max-line-length = 88
+
+# Fichiers et dossiers à exclure de l'analyse
+exclude =
+    .git,
+    .venv,
+    venv,
+    __pycache__,
+    .ipynb_checkpoints
