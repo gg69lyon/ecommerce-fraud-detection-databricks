@@ -9,7 +9,7 @@ ignore =
     E225
 
 # Ou étendre la limite de longueur de ligne au lieu de l'ignorer
-max-line-length = 88
+max-line-length = 100
 
 # Fichiers et dossiers à exclure de l'analyse
 exclude =
