@@ -9,7 +9,8 @@ Ce projet implémente un pipeline complet de détection de fraude sur Databricks
 * inférence ML en streaming
 * monitoring (générateur Kaggle-like)
 * dashboard SQL complet
-* CI/CD GitHub Actions → Databricks Repos → Databricks Jobs
+* Tests PySpark exécutés dans GitHub Actions
+* CI GitHub Actions (tests)
 
 Ce projet est entièrement compatible Databricks **Free Edition**, **Unity Catalog**, et **Volumes UC**.
 
@@ -65,7 +66,7 @@ Ce projet est entièrement compatible Databricks **Free Edition**, **Unity Catal
                      ┌────────────────────────────────────────────────────────┐
                      │                    ML MONITORING                       │
                      │ Notebook 09 - Monitoring (accuracy, FP/FN, dérive)     │
-                     │ Dashboard SQL                      │
+                     │ Dashboard SQL                                          │
                      └────────────────────────────────────────────────────────┘
 
 
@@ -111,14 +112,9 @@ fraud-detection-databricks/
 │   ├── 08_ml_inference.py
 │   └── 09_ml_monitoring.py
 │
-├── jobs/
-│   ├── batch_job.json
-│   ├── streaming_job.json
-│   └── ml_job.json
-│
 └── .github/
     └── workflows/
-        └── ci_cd_databricks.yml
+        └── ci_databricks.yml
 ```
 
 # Bronze Layer
@@ -151,7 +147,7 @@ Silver Streaming → utilisé pour l’inférence ML
 
 Gold Batch → dashboard historique
 
-Gold Streaming → dashboard "temps réel"
+Gold Streaming → dashboard
 
 # ML Training (Notebook 07)
 
@@ -193,7 +189,7 @@ Sections :
 * Matrice de confusion
 * Analyse des erreurs
 
-# CI/CD — GitHub Actions → Databricks
+# CI — GitHub Actions → Databricks
 Secrets à configurer dans GitHub
 | Secret | Description |
 | --- | --- |
@@ -203,11 +199,30 @@ Secrets à configurer dans GitHub
 
 Workflow GitHub Actions
 ```
-.github/workflows/ci_cd_databricks.yml
+.github/workflows/ci_databricks.yml
 ```
 Déclenche :
-* synchronisation GitHub → Databricks Repos
-* exécution des jobs Databricks :
-  * Batch pipeline
-  * Streaming pipeline
-  * ML pipeline
+* Tests PySpark
+
+# Limitations Databricks Free Edition
+Databricks Free Edition ne permet pas :
+
+* d’appeler l’API Jobs
+* d’appeler l’API Repos
+* d’utiliser le CLI v1 ou v2
+* d’automatiser les pipelines via GitHub Actions
+* d’utiliser Git Credentials ou Git Integration avancée
+
+Les jobs doivent être exécutés manuellement dans l’UI Databricks.
+
+
+# Roadmap (si passage à un workspace payant)
+Si tu migres vers un workspace Databricks payant :
+
+Tu pourras activer :
+* API Jobs (déclenchement automatique)
+* API Repos (sync GitHub → Databricks)
+* Databricks CLI v2
+* Terraform (jobs, clusters, pipelines)
+* MLflow Registry complet
+* Feature Store

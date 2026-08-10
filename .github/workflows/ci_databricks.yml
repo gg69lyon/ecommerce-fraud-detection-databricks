@@ -1,4 +1,4 @@
-name: CI-CD Fraud Pipeline
+name: CI Fraud Pipeline
 
 on:
   push:
@@ -23,8 +23,15 @@ jobs:
           pip install --upgrade pip
           pip install pyspark
           pip install pytest
-          pip install nbformat nbconvert      
-
+          pip install nbformat nbconvert
+          pip install nbqa
+          pip install flake8 black isort
+      
+      - name: Lint notebooks with nbQA
+        run: |
+          nbqa flake8 notebooks/
+          nbqa black --check notebooks/
+      
       - name: Run PySpark tests
         run: pytest tests/
 
