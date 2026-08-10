@@ -27,15 +27,15 @@ Ce projet est entièrement compatible Databricks **Free Edition**, **Unity Catal
                      ┌────────────────────────────────────────────────────────┐
                      │                    BRONZE LAYER                        │
                      │ Notebook 01 - Bronze Batch                             │
-                     │ Notebook 04 - Bronze Streaming                          │
-                     │ UC Volume: /Volumes/main/bronze/bronze_volume           │
+                     │ Notebook 04 - Bronze Streaming                         │
+                     │ UC Volume: /Volumes/main/bronze/bronze_volume          │
                      └──────────────────────────┬─────────────────────────────┘
                                                 │
                                                 ▼
                      ┌────────────────────────────────────────────────────────┐
                      │                    SILVER LAYER                        │
                      │ Notebook 02 - Silver Batch                             │
-                     │ Notebook 05 - Silver Streaming                          │
+                     │ Notebook 05 - Silver Streaming                         │
                      │ Enrichments: event_time, minute, hour, day, is_fraud   │
                      └──────────────────────────┬─────────────────────────────┘
                                                 │
@@ -190,18 +190,14 @@ Sections :
 * Analyse des erreurs
 
 # CI — GitHub Actions → Databricks
-Secrets à configurer dans GitHub
-| Secret | Description |
-| --- | --- |
-| ``DATABRICKS_HOST`` | URL du workspace Databricks |
-| ``DATABRICKS_TOKEN`` | PAT Databricks |
-| ``DATABRICKS_REPO_PATH`` | ``/Repos/user/ecommerce-fraud-detection-databricks`` |
 
 Workflow GitHub Actions
 ```
 .github/workflows/ci_databricks.yml
 ```
 Déclenche :
+* Format notebooks with Black
+* Lint notebooks with Flake8
 * Tests PySpark
 
 # Limitations Databricks Free Edition
