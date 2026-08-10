@@ -81,6 +81,9 @@ Le projet repose sur 9 notebooks, organisés en trois pipelines :
 | 03 | Gold Batch |
 | 07 | ML Training (SparkML + MLflow) |
 
+Source de données :
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/data
+
 ### Pipeline Streaming (simulation "temps réel")
 | Notebook | Rôle |
 | --- | --- |
